@@ -172,6 +172,7 @@ public class TextEditor extends JFrame {
 					reader.close();
 					textArea.setText(extractedText);
 					
+					refreshFooter();
 					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
