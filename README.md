@@ -9,7 +9,7 @@ also if you have a suggestion or something you see it is best to change you are 
 [Eclipse IDE][Eclipse Website]
 
 ## UI Screenshots
-![FrontUI]
+![FrontUI]  
 ![FileOptionsMenu]
 
 

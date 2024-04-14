@@ -4,11 +4,16 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -35,6 +40,11 @@ public class TextEditor extends JFrame {
 	private JTextArea textArea;
 	private JFileChooser fileChooser;
 	private String filePath;
+	private int words;
+	private int characters;
+	JLabel WCounter;
+	JLabel CCounter;
+	final String regex = "(\\d\\w+|[0-9])";
 	
 	//private Font textFont;
 	
@@ -62,6 +72,7 @@ public class TextEditor extends JFrame {
 		this.setJMenuBar(addMenu());
 		this.add(addTopPanel());
 		this.add(addTextAreaToScroll());
+		this.add(addFooterPanel());
 		
 	}
 	
@@ -242,6 +253,26 @@ public class TextEditor extends JFrame {
 		UserEnteredTextBox.setBackground(Color.WHITE);
 		UserEnteredTextBox.setLineWrap(true);
 		UserEnteredTextBox.setWrapStyleWord(true);
+
+		UserEnteredTextBox.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				
+			}
+		
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+				refreshFooter();
+			}
+		
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+					
+		
+			}
+		});
 		
 		return UserEnteredTextBox;
 	}
@@ -264,9 +295,53 @@ public class TextEditor extends JFrame {
 		
 		return fontSizePanel;
 	}
+
+	JPanel addFooterPanel(){
+		JPanel footer = new JPanel();
+		WCounter = new JLabel("Words: 0");
+		CCounter = new JLabel("Characters: 0");
+
+		footer.setPreferredSize(new Dimension(450,35));
+		//footer.setBackground(Color.white);
+
+		words = 0;
+		characters = 0;
+
+		footer.setLayout(new GridLayout(1,2));
+		footer.add(WCounter);
+		footer.add(new JSeparator(SwingConstants.VERTICAL));
+		footer.add(CCounter);
+
+		return footer;
+	}
 	
 	void refreshtextArea() {
 		textArea.setFont(new Font(fontName, Font.PLAIN, fontSize));
 		textArea.setForeground(textColor);
+	}
+
+	void refreshFooter(){
+		String x = textArea.getText();
+		int spaces =0;
+		characters = 0;
+		words =0;
+        x = x.trim();
+		for(char i:x.toCharArray()){
+			if(i==' ')
+				spaces++;
+		}
+
+		characters = x.length()- spaces;
+		words = characters !=0 ? spaces+1:0;
+		Pattern r = Pattern.compile(regex);
+		Matcher m = r.matcher(WCounter.getText());
+
+		if(m.find())
+		WCounter.setText(WCounter.getText().replace(m.group(1), Integer.toString(words)));
+		
+		m = r.matcher(CCounter.getText());
+		
+		if(m.find())
+		CCounter.setText(CCounter.getText().replace(m.group(1), Integer.toString(characters)));
 	}
 }
